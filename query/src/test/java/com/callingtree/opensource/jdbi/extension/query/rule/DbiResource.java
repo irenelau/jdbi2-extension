@@ -1,4 +1,4 @@
-package com.callingtree.opensource.jdbi.extension.query.testrule;
+package com.callingtree.opensource.jdbi.extension.query.rule;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.rules.ExternalResource;
@@ -34,7 +34,7 @@ public class DbiResource extends ExternalResource {
                     handle.createStatement(createSql).execute();
                 }
 
-                logger.debug("Table(s) created");
+                logger.debug("{} table(s) created.", createSqls.length);
                 return null;
             }
         });
