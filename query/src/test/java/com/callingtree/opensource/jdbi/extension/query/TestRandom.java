@@ -9,12 +9,12 @@ import static org.junit.Assert.assertEquals;
 
 public class TestRandom {
 
-    private DBI dbi;
-
     @Rule
     public DbiResource dbiResource = new DbiResource(TestUtil.CREATE_PERSON_TABLE_SQL,
             TestUtil.CREATE_ALIAS_TABLE_SQL,
             TestUtil.CREATE_PHONE_TABLE_SQL);
+
+    private DBI dbi;
 
     @Test
     public void testInClause() {
@@ -31,8 +31,13 @@ public class TestRandom {
 
         // Person 1 and person 2 has the same number but person2's one is inactive now
 
+        dao.findAllPersons();
+        dao.findAllAliases();
+        dao.findAllPhones();
+
         // TODO - insert checks
         assertEquals(1, 1);
+
     }
 
     @Test

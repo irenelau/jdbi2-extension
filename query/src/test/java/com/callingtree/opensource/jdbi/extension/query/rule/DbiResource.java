@@ -24,7 +24,7 @@ public class DbiResource extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
-        final DataSource ds = JdbcConnectionPool.create("jdbc:h2:mem:test", "test", "test");
+        final DataSource ds = JdbcConnectionPool.create("jdbc:h2:mem:", "sa", "");
         this.dbi = new DBI(ds);
 
         getDbi().withHandle(new HandleCallback<Void>() {

@@ -7,13 +7,13 @@ public class TestEntities {
 
     public static class Person {
 
-        private int id;
+        private Integer id;
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public Person setId(int id) {
+        public Person setId(Integer id) {
             this.id = id;
             return this;
         }
@@ -37,20 +37,19 @@ public class TestEntities {
                     .append(id)
                     .toHashCode();
         }
-
     }
 
     public static class Alias {
 
-        private int id;
+        private Integer id;
 
         private String alias;
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public Alias setId(int id) {
+        public Alias setId(Integer id) {
             this.id = id;
             return this;
         }
@@ -89,19 +88,19 @@ public class TestEntities {
 
     public static class Phone {
 
-        private int id;
+        private Integer id;
 
         private TestEnums.PhoneType type;
 
         private Long number;
 
-        private boolean isActive;
+        private Boolean isActive;
 
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
-        public Phone setId(int id) {
+        public Phone setId(Integer id) {
             this.id = id;
             return this;
         }
@@ -124,11 +123,11 @@ public class TestEntities {
             return this;
         }
 
-        public boolean getIsActive() {
+        public Boolean getIsActive() {
             return isActive;
         }
 
-        public Phone setIsActive(boolean active) {
+        public Phone setIsActive(Boolean active) {
             isActive = active;
             return this;
         }
@@ -143,9 +142,9 @@ public class TestEntities {
 
             return new EqualsBuilder()
                     .append(id, phone.id)
-                    .append(isActive, phone.isActive)
                     .append(type, phone.type)
                     .append(number, phone.number)
+                    .append(isActive, phone.isActive)
                     .isEquals();
         }
 
@@ -159,5 +158,4 @@ public class TestEntities {
                     .toHashCode();
         }
     }
-
 }
