@@ -39,27 +39,27 @@ public class TestEntities {
         }
     }
 
-    public static class Alias {
+    public static class Nickname {
 
         private Integer id;
 
-        private String alias;
+        private String nickname;
 
         public Integer getId() {
             return id;
         }
 
-        public Alias setId(Integer id) {
+        public Nickname setId(Integer id) {
             this.id = id;
             return this;
         }
 
-        public String getAlias() {
-            return alias;
+        public String getNickname() {
+            return nickname;
         }
 
-        public Alias setAlias(String alias) {
-            this.alias = alias;
+        public Nickname setNickname(String nickname) {
+            this.nickname = nickname;
             return this;
         }
 
@@ -69,11 +69,11 @@ public class TestEntities {
 
             if (o == null || getClass() != o.getClass()) return false;
 
-            Alias alias1 = (Alias) o;
+            Nickname nickname1 = (Nickname) o;
 
             return new EqualsBuilder()
-                    .append(id, alias1.id)
-                    .append(alias, alias1.alias)
+                    .append(id, nickname1.id)
+                    .append(nickname, nickname1.nickname)
                     .isEquals();
         }
 
@@ -81,7 +81,7 @@ public class TestEntities {
         public int hashCode() {
             return new HashCodeBuilder(17, 37)
                     .append(id)
-                    .append(alias)
+                    .append(nickname)
                     .toHashCode();
         }
     }

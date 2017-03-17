@@ -12,8 +12,8 @@ public abstract class TestDataDao {
     @SqlUpdate(" INSERT INTO PERSON ( Id ) VALUES ( :id ) ")
     abstract int insertPerson(@BindBean TestEntities.Person person);
 
-    @SqlUpdate(" INSERT INTO ALIAS ( Id, Alias ) VALUES ( :id, :alias ) ")
-    abstract int insertAlias(@BindBean TestEntities.Alias alias);
+    @SqlUpdate(" INSERT INTO NICKNAME ( Id, Nickname ) VALUES ( :id, :nickname ) ")
+    abstract int insertAlias(@BindBean TestEntities.Nickname nickname);
 
     @SqlUpdate(" INSERT INTO PHONE ( Id, Type, Number, IsActive ) VALUES ( :id, :type, :number, :isActive ) ")
     abstract int insertPhone(@BindBean TestEntities.Phone phone);
@@ -23,8 +23,8 @@ public abstract class TestDataDao {
     abstract List<TestEntities.Person> findAllPersons();
 
     @RegisterMapper(TestMappers.AliasMapper.class)
-    @SqlQuery(" SELECT * FROM Alias ")
-    abstract List<TestEntities.Alias> findAllAliases();
+    @SqlQuery(" SELECT * FROM NICKNAME ")
+    abstract List<TestEntities.Nickname> findAllAliases();
 
     @RegisterMapper(TestMappers.PhoneMapper.class)
     @SqlQuery(" SELECT * FROM PHONE ")

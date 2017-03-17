@@ -16,12 +16,12 @@ public class TestMappers {
         }
     }
 
-    public static class AliasMapper implements ResultSetMapper<TestEntities.Alias> {
+    public static class AliasMapper implements ResultSetMapper<TestEntities.Nickname> {
 
-        public TestEntities.Alias map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
-            return new TestEntities.Alias()
+        public TestEntities.Nickname map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
+            return new TestEntities.Nickname()
                     .setId(getNInt(resultSet, "Id"))
-                    .setAlias(resultSet.getString("Alias"));
+                    .setNickname(resultSet.getString("Nickname"));
         }
     }
 

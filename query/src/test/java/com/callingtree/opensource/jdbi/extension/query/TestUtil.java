@@ -8,9 +8,9 @@ class TestUtil {
             "  ); \n";
 
     static final String CREATE_ALIAS_TABLE_SQL = "" +
-            "  CREATE TABLE ALIAS ( \n" +
+            "  CREATE TABLE NICKNAME ( \n" +
             "      Id         INTEGER         not null, \n" +
-            "      Alias      VARCHAR(16)     not null \n" +
+            "      Nickname   VARCHAR(16)     not null \n" +
             "  ); \n";
 
     static final String CREATE_PHONE_TABLE_SQL = "" +
