@@ -1,6 +1,6 @@
 package com.callingtree.opensource.jdbi.extension.query;
 
-import com.callingtree.opensource.jdbi.extension.annotation.Where;
+import com.callingtree.opensource.jdbi.extension.annotation.Equals;
 import com.callingtree.opensource.jdbi.extension.query.rule.DbiResource;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,7 +16,7 @@ public class TestDynamicQueryBuilder {
             TestUtil.CREATE_PHONE_TABLE_SQL);
 
     @Test
-    public void testSimpleWhereCondition() {
+    public void testSimpleWhereCondition() throws IllegalAccessException {
         DBI dbi = dbiResource.getDbi();
         TestDataDao dao = dbi.onDemand(TestDataDao.class);
 
@@ -32,8 +32,12 @@ public class TestDynamicQueryBuilder {
         // Person 1 and person 2 has the same number but person2's one is inactive now
 
         WhereConditions whereCondition = new WhereConditions() {
-            @Where(alias = "a", columnName = "Nickname")
-            private String nickname;
+            @Equals(alias = "a", columnName = "Nickname")
+            private String nickname = "foo";
+
+            private String notUsedStr;
+
+            private Integer notUsedInt;
         };
 
         DynamicQueryBuilder.build(dbi.open(), "", whereCondition);
