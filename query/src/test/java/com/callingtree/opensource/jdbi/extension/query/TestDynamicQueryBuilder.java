@@ -31,20 +31,26 @@ public class TestDynamicQueryBuilder {
 
         // Person 1 and person 2 has the same number but person2's one is inactive now
 
-        WhereConditions whereCondition = new WhereConditions() {
-            @Equals(alias = "a", columnName = "Nickname")
-            private String nickname = "foo";
+        final String tableAlias = "a";
+        final String tableColumnName = "Nickname";
+        final String nicknameValue = "foo";
+        WhereConditions inputWhereConds = new WhereConditions() {
+
+            @Equals(alias = tableAlias, columnName = tableColumnName)
+            private String nickname = nicknameValue;
 
             private String notUsedStr;
 
             private Integer notUsedInt;
+
         };
 
-        DynamicQueryBuilder.build(dbi.open(), "", whereCondition);
+        DynamicQueryBuilder builder = new DynamicQueryBuilder("", inputWhereConds);
+        builder.build();
 
-        // TODO - insert checks
-        assertEquals(1, 1);
-
+        assertEquals("Only one properties added",1, builder.getProperties().size());
+        assertEquals("Check property name correct", tableAlias + "_" + tableColumnName + "_0", builder.getProperties().keySet().iterator().next());
+        assertEquals("Check property value correct", nicknameValue, builder.getProperties().values().iterator().next());
     }
 
     @Test
