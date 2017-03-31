@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DynamicQueryBuilder {
@@ -45,40 +46,63 @@ public class DynamicQueryBuilder {
                 modifiedSelectSql.append(" AND ");
             }
 
-            Field field = clauses.get(i);
-            if (field.getDeclaredAnnotation(Equals.class) != null) {
-                varCount += appendEquals(whereConditions, field, modifiedSelectSql, properties, varCount);
-            }
+            varCount += appendEquals(whereConditions, clauses.get(i), modifiedSelectSql, properties, varCount);
         }
     }
 
-    private int appendEquals(WhereConditions whereConditions, Field field,
-                                    StringBuilder sqlBuilder, Map<String, Object> properties, int varCount) throws IllegalAccessException {
+    /**
+     * Depending on the field is null or not, it does the followings:
+     * <ul>
+     *     <li>Append the where condition to the SQL</li>
+     *     <li>Creates a token for binding the property if not null</li>
+     * </ul>
+     *
+     * @param whereConditions   The where condition
+     * @param field             The field in the WhereCondition that we are looking at
+     * @param sqlBuilder        The string build for the modified SQL
+     * @param properties        HashMap of all properties created
+     * @param currVarCount      The current var count for adding to the token for binding value using JDBI
+     *
+     * @return The number of properties added (1 if there not null, 0 otherwise because there's nothing for JDBI to bind)
+     * @throws IllegalAccessException    If there is issue to look up the field
+     */
+    int appendEquals(WhereConditions whereConditions, Field field,
+                     StringBuilder sqlBuilder, Map<String, Object> properties,
+                     int currVarCount) throws IllegalAccessException {
 
         Equals equals = field.getDeclaredAnnotation(Equals.class);
+        StringBuilder jdbiPropertyName = new StringBuilder();
+        StringBuilder jdbiColumnName = new StringBuilder();
 
-        StringBuilder property = new StringBuilder();
         if (StringUtils.isNotEmpty(equals.alias())) {
-            sqlBuilder.append(equals.alias()).append(ALIAS_SEPERATOR);
-            property.append(equals.alias()).append(TOKEN_SEPERATOR);
+            jdbiColumnName.append(equals.alias()).append(ALIAS_SEPERATOR);
+            jdbiPropertyName.append(equals.alias()).append(TOKEN_SEPERATOR);
         }
+        jdbiColumnName.append(equals.columnName());
+        jdbiPropertyName.append(equals.columnName()).append(TOKEN_SEPERATOR).append(currVarCount);
 
-        property.append(equals.columnName()).append(TOKEN_SEPERATOR).append(varCount);
-        sqlBuilder.append(equals.columnName()).append(" = ").append(":").append(property.toString()).append(NEW_LINE);
+        sqlBuilder.append(jdbiColumnName);
 
-        properties.put(property.toString(), getFieldValue(field, whereConditions));
-
-        return 1;
+        Optional<Object> fieldValue = getFieldValue(field, whereConditions);
+        if (fieldValue.isPresent()) {
+            sqlBuilder.append(" = ").append(":").append(jdbiPropertyName.toString()).append(NEW_LINE);
+            properties.put(jdbiPropertyName.toString(), fieldValue.get());
+            return 1;
+        }
+        else {
+            sqlBuilder.append(" is null").append(NEW_LINE);
+            return 0;
+        }
     }
 
-    private Object getFieldValue(Field field, Object parent) throws IllegalAccessException {
+    private Optional<Object> getFieldValue(Field field, Object parent) throws IllegalAccessException {
         // FIXME: is there a better way to do this?
         field.setAccessible(true);
-        return field.get(parent);
+        return Optional.ofNullable(field.get(parent));
     }
 
-    StringBuilder getModifiedSelectSql() {
-        return modifiedSelectSql;
+    String getModifiedSelectSql() {
+        return modifiedSelectSql.toString();
     }
 
     Map<String, Object> getProperties() {
